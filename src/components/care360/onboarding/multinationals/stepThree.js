@@ -2,7 +2,6 @@ import React from 'react'
 import { Form, Input } from 'antd'
 // import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 // import { getDiseaseMedicationsAPI } from 'redux/apis'
-// import { connect } from 'react-redux'
 
 const StepThree = () => {
   // const
