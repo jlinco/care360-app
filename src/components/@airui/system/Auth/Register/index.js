@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Input, Button, Form } from 'antd'
+import { Input, Button, Form, Radio } from 'antd'
 import { Link } from 'react-router-dom'
 import style from '../style.module.scss'
 
@@ -8,6 +8,8 @@ const mapStateToProps = ({ user, dispatch }) => ({ user, dispatch })
 
 const Register = ({ dispatch, user }) => {
   const onFinish = values => {
+    console.log(values)
+    // debugger;
     dispatch({
       type: 'user/REGISTER',
       payload: values,
@@ -35,6 +37,17 @@ const Register = ({ dispatch, user }) => {
           onFinishFailed={onFinishFailed}
           className="mb-4"
         >
+          <Form.Item
+            label="Select Role"
+            name="role"
+            rules={[{ required: true, message: 'Please select a role for this account' }]}
+          >
+            <Radio.Group>
+              <Radio.Button value="patient">Patient</Radio.Button>
+              <Radio.Button value="doctor">Doctor</Radio.Button>
+              <Radio.Button value="pharmacy">Pharmacy</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
           <Form.Item
             name="name"
             rules={[{ required: true, message: 'Please input your full name' }]}

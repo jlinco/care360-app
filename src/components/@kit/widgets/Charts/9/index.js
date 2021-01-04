@@ -70,7 +70,7 @@ const Chart9 = () => {
 
   return (
     <div>
-      <div className="text-dark font-size-18 font-weight-bold mb-1">Year Profit</div>
+      <div className="text-dark font-size-18 font-weight-bold mb-1">Category Sales</div>
       <div className="text-gray-6 mb-2">Revenue by location and date</div>
       <div className="d-flex flex-wrap align-items-center">
         <div className="mr-3 mt-3 mb-3 position-relative">

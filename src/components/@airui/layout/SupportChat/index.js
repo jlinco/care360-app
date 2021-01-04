@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
-import General14 from '@kit/widgets/General/14'
+import General14 from '../../../@kit/widgets/General/14'
 import style from './style.module.scss'
 
 const mapStateToProps = ({ settings }) => ({ settings })

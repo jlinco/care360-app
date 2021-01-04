@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react' /*  */
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom' /*  */
 import { find } from 'lodash'
 import classNames from 'classnames'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
@@ -9,9 +9,10 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import style from './style.module.scss'
 
 const { Sider } = Layout
-const mapStateToProps = ({ menu, settings }) => ({
+const mapStateToProps = ({ menu, settings, user }) => ({
   menuData: menu.menuData,
   settings,
+  user,
   flyoutActive:
     (settings.menuType === 'flyout' ||
       settings.menuType === 'compact' ||
@@ -22,7 +23,15 @@ const mapStateToProps = ({ menu, settings }) => ({
 const flyoutTimers = {}
 let flyoutItems = {}
 
-const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, flyoutActive }) => {
+const MenuLeft = ({
+  dispatch,
+  menuData = [],
+  location: { pathname },
+  flyoutActive,
+  settings,
+  user,
+}) => {
+  /*   */
   const [activeSubmenu, setActiveSubmenu] = useState('')
   const [activeItem, setActiveItem] = useState('')
   const [renderedFlyoutItems, setRenderedFlyoutItems] = useState({})
@@ -32,17 +41,17 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, menuData])
 
-  const toggleSettings = e => {
-    e.preventDefault()
-    const { isSidebarOpen } = settings
-    dispatch({
-      type: 'settings/CHANGE_SETTING',
-      payload: {
-        setting: 'isSidebarOpen',
-        value: !isSidebarOpen,
-      },
-    })
-  }
+  // const toggleSettings = e => {
+  //   e.preventDefault()
+  //   const { isSidebarOpen } = settings
+  //   dispatch({
+  //     type: 'settings/CHANGE_SETTING',
+  //     payload: {
+  //       setting: 'isSidebarOpen',
+  //       value: !isSidebarOpen,
+  //     },
+  //   })
+  // }
 
   const toggleMenu = e => {
     e.preventDefault()
@@ -179,6 +188,7 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
   const generateMenuItems = () => {
     const menuItem = item => {
       const { key, title, icon, url } = item
+      // console.log(roles)
       if (item.category) {
         return (
           <li className={style.air__menuLeft__category} key={Math.random()}>
@@ -187,25 +197,48 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
         )
       }
       return (
-        <li
-          className={classNames(style.air__menuLeft__item, {
-            [style.air__menuLeft__item__active]: activeItem === key,
-          })}
-          key={key}
-        >
-          {item.url && (
-            <Link to={url} className={style.air__menuLeft__link}>
-              {icon && <i className={`${icon} ${style.air__menuLeft__icon}`} />}
-              <span>{title}</span>
-            </Link>
+        // <li
+        //   className={classNames(style.air__menuLeft__item, {
+        //     [style.air__menuLeft__item__active]: activeItem === key,
+        //   })}
+        //   key={key}
+        // >
+        //   {item.url && (
+        //   <Link to={url} className={style.air__menuLeft__link}>
+        //     {icon && <i className={`${icon} ${style.air__menuLeft__icon}`} />}
+        //     <span>{title}</span>
+        //   </Link>
+        //   )}
+        //   {!item.url && (
+        //   <a href="#" onClick={e => e.preventDefault()} className={style.air__menuLeft__link}>
+        //     {icon && <i className={`${icon} ${style.air__menuLeft__icon}`} />}
+        //     <span>{title}</span>
+        //   </a>
+        //   )}
+        // </li>
+        <div>
+          {item.roles.includes(user.role) && (
+            <li
+              className={classNames(style.air__menuLeft__item, {
+                [style.air__menuLeft__item__active]: activeItem === key,
+              })}
+              key={key}
+            >
+              {item.url && (
+                <Link to={url} className={style.air__menuLeft__link}>
+                  {icon && <i className={`${icon} ${style.air__menuLeft__icon}`} />}
+                  <span>{title}</span>
+                </Link>
+              )}
+              {!item.url && (
+                <a href="#" onClick={e => e.preventDefault()} className={style.air__menuLeft__link}>
+                  {icon && <i className={`${icon} ${style.air__menuLeft__icon}`} />}
+                  <span>{title}</span>
+                </a>
+              )}
+            </li>
           )}
-          {!item.url && (
-            <a href="#" onClick={e => e.preventDefault()} className={style.air__menuLeft__link}>
-              {icon && <i className={`${icon} ${style.air__menuLeft__icon}`} />}
-              <span>{title}</span>
-            </a>
-          )}
-        </li>
+        </div>
       )
     }
 
@@ -256,6 +289,7 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
 
   const items = generateMenuItems()
 
+  // console.log(user);
   return (
     <Sider width="auto">
       <TransitionGroup>
@@ -299,30 +333,30 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
             <span />
           </a>
           <a href="#" onClick={e => e.preventDefault()} className={style.air__menuLeft__logo}>
-            <div className={style.air__menuLeft__logo__letter}>A</div>
-            <div className={style.air__menuLeft__logo__name}>{settings.logo}</div>
-            <div className={style.air__menuLeft__logo__descr}>{settings.description}</div>
+            <div className={style.air__menuLeft__logo__letter}>C</div>
+            <div className={style.air__menuLeft__logo__name}>Care360</div>
+            <div className={style.air__menuLeft__logo__descr}>ADMIN CONSOLE</div>
           </a>
           <a href="#" onClick={e => e.preventDefault()} className={style.air__menuLeft__user}>
             <div className={style.air__menuLeft__user__avatar}>
-              <img src="resources/images/avatars/avatar.png" alt="David Beckham" />
+              <img src="resources/images/avatars/avatar.png" alt="" />
             </div>
-            <div className={style.air__menuLeft__user__name}>David Beckham</div>
-            <div className={style.air__menuLeft__user__role}>Administrator</div>
+            <div className={style.air__menuLeft__user__name}>{user.name}</div>
+            <div className={style.air__menuLeft__user__role}>{user.role}</div>
           </a>
           <PerfectScrollbar>
             <div id="menu-left-container" className={style.air__menuLeft__container}>
               <ul className={style.air__menuLeft__list}>
-                <li className={style.air__menuLeft__category}>
+                {/* <li className={style.air__menuLeft__category}>
                   <span>Information</span>
-                </li>
-                <li className={style.air__menuLeft__item}>
+                </li> */}
+                {/* <li className={style.air__menuLeft__item}>
                   <a href="#" className={style.air__menuLeft__link} onClick={toggleSettings}>
                     <i className={`fe fe-settings ${style.air__menuLeft__icon}`} />
                     <span>Settings</span>
                   </a>
-                </li>
-                <li className={style.air__menuLeft__item}>
+                </li> */}
+                {/* <li className={style.air__menuLeft__item}>
                   <a
                     href="https://docs.sellpixels.com/"
                     className={style.air__menuLeft__link}
@@ -332,10 +366,28 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
                     <i className={`fe fe-compass ${style.air__menuLeft__icon}`} />
                     <span>Documentation</span>
                   </a>
-                </li>
+                </li> */}
                 {items}
+                {/* <li className={style.air__menuLeft__item}>
+                  <Link
+                    to="/dashboard/overview"
+                    className={style.air__menuLeft__link}
+                  >
+                    <i className={`fe fe-home ${style.air__menuLeft__icon}`} />
+                    <span>Dashboard</span>
+                  </Link>
+                </li>
+                <li className={style.air__menuLeft__item}>
+                  <Link
+                    to="/dashboard/new-patient"
+                    className={style.air__menuLeft__link}
+                  >
+                    <i className={`fe fe-user-plus ${style.air__menuLeft__icon}`} />
+                    <span>New Patient</span>
+                  </Link>
+                </li> */}
               </ul>
-              <div className={style.air__menuLeft__banner}>
+              {/* <div className={style.air__menuLeft__banner}>
                 <p>More components, more styles, more themes, and premium support!</p>
                 <a
                   href="https://themeforest.net/item/air-ui-multi-concept-admin-template/24434456"
@@ -345,7 +397,7 @@ const MenuLeft = ({ dispatch, menuData = [], location: { pathname }, settings, f
                 >
                   Buy Air UI
                 </a>
-              </div>
+              </div> */}
             </div>
           </PerfectScrollbar>
         </div>

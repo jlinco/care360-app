@@ -2,7 +2,7 @@ import React from 'react'
 import { injectIntl } from 'react-intl'
 import { Dropdown } from 'antd'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import List1 from '@kit/widgets/Lists/1'
+import List1 from '../../../../@kit/widgets/Lists/1'
 import styles from './style.module.scss'
 
 const Search = ({ intl: { formatMessage } }) => {

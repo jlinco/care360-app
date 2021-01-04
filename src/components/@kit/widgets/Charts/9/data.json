@@ -1,8 +1,8 @@
 {
-  "labels": ["Boston", "Gravity Falls", "New York"],
+  "labels": ["Painkillers", "Anti Depressants", "Anti Malarials"],
   "datasets": [
     {
-      "data": [45, 45, 45],
+      "data": [20, 45, 35],
       "backgroundColor": ["#46be8a", "#fb434a", "#1b55e3"],
       "borderColor": "#fff",
       "borderWidth": 2,

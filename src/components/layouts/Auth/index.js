@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import { Layout } from 'antd'
 import { withRouter } from 'react-router-dom'
 import classNames from 'classnames'
-import Sidebar from '@airui/layout/Sidebar'
-import SupportChat from '@airui/layout/SupportChat'
+// import Sidebar from '../../@airui/layout/Sidebar'
+import SupportChat from '../../@airui/layout/SupportChat'
 import style from './style.module.scss'
+import logo from '../../assets/images/main-logo.png'
 
 const mapStateToProps = ({ settings }) => ({
   isGrayTopbar: settings.isGrayTopbar,
@@ -17,19 +18,11 @@ const mapStateToProps = ({ settings }) => ({
   description: settings.description,
 })
 
-const AuthLayout = ({
-  children,
-  isCardShadow,
-  isSquaredBorders,
-  isBorderless,
-  authPagesColor,
-  logo,
-  description,
-}) => {
+const AuthLayout = ({ children, isCardShadow, isSquaredBorders, isBorderless, authPagesColor }) => {
   return (
     <Layout>
       <Layout.Content>
-        <Sidebar />
+        {/* <Sidebar /> */}
         <SupportChat />
         <div
           className={classNames(`${style.container}`, {
@@ -46,9 +39,10 @@ const AuthLayout = ({
         >
           <div className="pt-5 pb-5 d-flex align-items-end mt-auto">
             <a href="#" onClick={e => e.preventDefault()} className={style.logo}>
-              <div className={style.logo__letter}>A</div>
+              {/* <div className={style.logo__letter}>A</div>
               <div className={style.logo__name}>{logo}</div>
-              <div className={style.logo__descr}>{description}</div>
+              <div className={style.logo__descr}>{description}</div> */}
+              <img src={logo} alt="Care360" />
             </a>
           </div>
           <div className={style.containerInner}>{children}</div>
@@ -78,8 +72,8 @@ const AuthLayout = ({
               </li>
             </ul>
             <div className="text-center">
-              Copyright © 2017-2020 Mdtk Soft |{' '}
-              <a href="https://www.mediatec.org/privacy" target="_blank" rel="noopener noreferrer">
+              Copyright © 2020-{new Date().getFullYear()} StrixusApps |{' '}
+              <a href="https://care360gh.com" target="_blank" rel="noopener noreferrer">
                 Privacy Policy
               </a>
             </div>

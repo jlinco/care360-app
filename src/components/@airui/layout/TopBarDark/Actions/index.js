@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Dropdown } from 'antd'
-import List2 from '@kit/widgets/Lists/2'
+import List2 from '../../../../@kit/widgets/Lists/2'
 import styles from './style.module.scss'
 
 const Actions = () => {

@@ -55,10 +55,9 @@ const FooterDark = ({ settings: { isContentMaxWidth, logo, description } }) => {
             <div className="col-md-12 col-lg-4">
               <h4 className="text-white font-weight-bold mb-4 mb-lg-5">About</h4>
               <p>
-                Air UI is a set of modern professional Html / React / Vue and Angular based
-                templates. This is a powerful and super flexible tool, which suits best for any kind
-                of web application: Web Sites, Web Applications, Hybrid Apps, CRM, CMS, Admin
-                Panels, etc.
+                Care360 is a medical service application aimed at making your medical experience
+                seamless. We will take you through the process of registering your patient and
+                tracking their medical progress over time within the application.
               </p>
             </div>
             <div className="col-md-6 col-lg-4">

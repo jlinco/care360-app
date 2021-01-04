@@ -3,15 +3,15 @@ import { Layout } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import classNames from 'classnames'
-import TopBar from '@airui/layout/TopBar'
-import TopBarDark from '@airui/layout/TopBarDark'
-import SubBar from '@airui/layout/SubBar'
-import MenuLeft from '@airui/layout/MenuLeft'
-import MenuTop from '@airui/layout/MenuTop'
-import Footer from '@airui/layout/Footer'
-import FooterDark from '@airui/layout/FooterDark'
-import Sidebar from '@airui/layout/Sidebar'
-import SupportChat from '@airui/layout/SupportChat'
+import TopBar from '../../@airui/layout/TopBar'
+import TopBarDark from '../../@airui/layout/TopBarDark'
+import SubBar from '../../@airui/layout/SubBar'
+import MenuLeft from '../../@airui/layout/MenuLeft'
+import MenuTop from '../../@airui/layout/MenuTop'
+import Footer from '../../@airui/layout/Footer'
+import FooterDark from '../../@airui/layout/FooterDark'
+// import Sidebar from '../../@airui/layout/Sidebar'
+import SupportChat from '../../@airui/layout/SupportChat'
 
 const mapStateToProps = ({ settings }) => ({
   menuLayoutType: settings.menuLayoutType,
@@ -51,7 +51,7 @@ const MainLayout = ({
           air__layout__borderless: isBorderless,
         })}
       >
-        <Sidebar />
+        {/* <Sidebar /> */}
         <SupportChat />
         {menuLayoutType === 'left' && <MenuLeft />}
         {menuLayoutType === 'top' && <MenuTop />}

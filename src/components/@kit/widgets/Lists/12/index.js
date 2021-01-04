@@ -14,7 +14,7 @@ const List12 = () => {
               <tr>
                 <td className="text-nowrap">
                   <div className={`${style.donut} ${style.danger} mr-3`} />
-                  California
+                  Paracetamol
                 </td>
                 <td className="text-right">
                   <strong>+78,366,263.00$</strong>
@@ -23,7 +23,7 @@ const List12 = () => {
               <tr>
                 <td className="text-nowrap">
                   <div className={`${style.donut} ${style.primary} mr-3`} />
-                  Texas
+                  Coartem
                 </td>
                 <td className="text-right">
                   <strong>+58,165,000.00$</strong>
@@ -32,7 +32,7 @@ const List12 = () => {
               <tr>
                 <td className="text-nowrap">
                   <div className={`${style.donut} ${style.success} mr-3`} />
-                  Wyoming
+                  Iron Supplements
                 </td>
                 <td className="text-right">
                   <strong>+26,156,267.00$</strong>
@@ -41,7 +41,7 @@ const List12 = () => {
               <tr>
                 <td className="text-nowrap">
                   <div className={`${style.donut} ${style.info} mr-3`} />
-                  Florida
+                  Ablify (aripiprazole)
                 </td>
                 <td className="text-right">
                   <strong>+18,823,026.00$</strong>
@@ -50,7 +50,7 @@ const List12 = () => {
               <tr>
                 <td className="text-nowrap">
                   <div className={`${style.donut} ${style.orange} mr-3`} />
-                  New York
+                  Excedrin
                 </td>
                 <td className="text-right">
                   <strong>+8,125,642.00$</strong>
