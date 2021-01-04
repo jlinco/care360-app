@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
+    "airtable": "^0.10.1",
     "antd": "^4.2.0",
     "axios": "^0.19.2",
     "axios-mock-adapter": "^1.18.1",
