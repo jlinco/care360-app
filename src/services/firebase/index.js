@@ -4,15 +4,18 @@ import 'firebase/auth'
 import 'firebase/database'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBJVhr2WZshEGR7egcxoygQIphKOkKVIYQ',
-  authDomain: 'sellpixels-7d5d4.firebaseapp.com',
-  databaseURL: 'https://sellpixels-7d5d4.firebaseio.com',
-  projectId: 'sellpixels-7d5d4',
-  storageBucket: 'cleanui-72a42.appspot.com',
-  messagingSenderId: '338219933237',
+  apiKey: 'AIzaSyDDa1LHcD5SLbvjVfy5YN7E2P3KaCmmQeE',
+  authDomain: 'care360-ed4e5.firebaseapp.com',
+  databaseURL: 'https://care360-ed4e5.firebaseio.com',
+  projectId: 'care360-ed4e5',
+  storageBucket: 'care360-ed4e5.appspot.com',
+  messagingSenderId: '762524575359',
+  appId: '1:762524575359:web:56ea50ec7d75bffd10c14a',
+  measurementId: 'G-YQCEWE9X0G',
 }
 
 firebase.initializeApp(firebaseConfig)
+// firebase.analytics()
 export const firebaseAuth = firebase.auth()
 export const firebaseDatabase = firebase.database()
 
@@ -28,7 +31,7 @@ export async function login(email, password) {
     })
 }
 
-export async function register(email, password, name) {
+export async function register(email, password, name, role) {
   return firebaseAuth
     .createUserWithEmailAndPassword(email, password)
     .then(response => {
@@ -38,8 +41,9 @@ export async function register(email, password, name) {
           .ref('users')
           .child(uid)
           .set({
-            role: 'admin',
+            role,
             name,
+            email,
           })
       }
       return true
@@ -76,6 +80,7 @@ export async function currentAccount() {
               name: userFields.name,
               role: userFields.role,
               avatar: user.photoUrl,
+              // email: userFields.email
             })
             return mergedUser
           }
