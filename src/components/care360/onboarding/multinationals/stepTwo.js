@@ -5,7 +5,7 @@ const { TextArea } = Input
 
 const StepTwo = () => {
   return (
-    <Form layout="vertical">
+    <>
       <div className="row">
         <div className="col-xs-12 col-md-12">
           <Form.Item
@@ -65,7 +65,7 @@ const StepTwo = () => {
           </Form.Item>
         </div>
       </div>
-    </Form>
+    </>
   )
 }
 

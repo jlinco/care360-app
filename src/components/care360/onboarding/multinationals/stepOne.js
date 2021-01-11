@@ -3,7 +3,7 @@ import { Form, Input } from 'antd'
 
 const StepOne = () => {
   return (
-    <Form layout="vertical">
+    <>
       <Form.Item
         name="Name"
         label="Name"
@@ -18,7 +18,7 @@ const StepOne = () => {
       >
         <Input placeholder="Enter alias for this multinational" />
       </Form.Item>
-    </Form>
+    </>
   )
 }
 
