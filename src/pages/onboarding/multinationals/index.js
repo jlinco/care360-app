@@ -1,140 +1,229 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
-import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom'
-import { Form, Input, Button, notification, Table } from 'antd'
-import { createNewMultiNational } from '../../../redux/multinationals/api'
+import dayjs from 'dayjs'
+import { Form, Input, Space, Select, Button, notification } from 'antd'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import StepPanel from './StepPanel'
+import * as firebase from '../../../services/firebase'
+import { getDiseasesApi } from '../../../services/apis/diseases'
 
+const { Option } = Select
 const { TextArea } = Input
 
-const mapStateToProps = state => {
-  return {
-    appState: state,
-  }
-}
+const OnboardMultiNationals = () => {
+  const [stepForm] = Form.useForm()
+  // const [diseaseOptions, setDiseaseOptions] = useState([])
 
-const OnboardMultiNationals = props => {
-  const { appState } = props
-  const {
-    multinationals: { multinationals },
-  } = appState
-  const [form] = Form.useForm()
-  const [loading, setLoading] = useState(false)
-  // console.log(appState)
-  const onFinish = values => {
-    setLoading(true)
-    const data = {
-      fields: values,
-    }
-    createNewMultiNational(data).then(rec => {
-      console.log(rec)
-      setLoading(false)
-      form.resetFields()
-      notification.success({
-        message: 'Multinational Added',
-        description: `You have successfully added a Multinational: ${rec[0].Name}`,
-      })
+  useEffect(() => {
+    // let mounted = true
+    getDiseasesApi().then(item => {
+      console.log(item)
     })
+  }, [])
+
+  const Step1Form = () => {
+    return (
+      <>
+        <Form.Item
+          name="Name"
+          label="Name"
+          rules={[{ required: true, message: 'Kindly enter a name for this Multinational' }]}
+        >
+          <Input placeholder="Enter corporation name here" />
+        </Form.Item>
+        <Form.Item
+          name="Alias"
+          label="Alias"
+          rules={[{ required: true, message: 'Kindly enter an alias for this multi-national' }]}
+        >
+          <Input placeholder="Enter alias for this multinational" />
+        </Form.Item>
+      </>
+    )
   }
-  const vendorColumns = [
-    {
-      title: 'Name',
-      dataIndex: 'Name',
-      className: 'text-gray-6',
-    },
-    {
-      title: 'Disease Area',
-      dataIndex: 'Disease Area',
-      className: 'text-gray-6',
-    },
-    {
-      title: 'Medication',
-      dataIndex: 'Medication',
-      className: 'text-gray-6',
-    },
-    {
-      dataIndex: 'action',
-      render: (row, index) => {
-        return (
-          <div>
-            <NavLink to={`/management/multinationals/${index.id}`}>
-              <button type="button" className="btn btn-outline-info mr-2 mb-2" data-row={row}>
-                See More
-              </button>
-            </NavLink>
-          </div>
-        )
-      },
-    },
-  ]
-  return (
-    <div>
-      <Helmet title="Onboard MultiNationals" />
-      <div className="air__utils__heading">
-        <h5>Onboarding: Multi Nationals</h5>
-      </div>
-      <div className="row">
-        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div className="card">
-            <div className="card-body">
-              <p>Please fill out the form below for the new MultiNational you will like to add</p>
-              <Form layout="vertical" onFinish={onFinish}>
-                <div className="row">
-                  <div className="col-md-12">
-                    <Form.Item name="Name" label="Name">
-                      <Input placeholder="Name" />
-                    </Form.Item>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-md-6">
-                    <Form.Item name="Location" label="Location">
-                      <TextArea rows={4} placeholder="Location/Address" />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xs-12 col-md-6">
-                    <Form.Item name="Description" label="Description">
-                      <TextArea rows={4} placeholder="Company description" />
-                    </Form.Item>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-md-6">
-                    <Form.Item name="Disease Area" label="Disease Area">
-                      <Input placeholder="Please provide the disease area you are targeting" />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xs-12 col-md-6">
-                    <Form.Item name="Medication" label="Medication">
-                      <Input placeholder="Please provide the medication used for the target disease area" />
-                    </Form.Item>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <Form.Item>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="btn btn-block btn-primary px-5"
-                        loading={loading}
-                      >
-                        Add MultiNational
-                      </Button>
-                    </Form.Item>
-                  </div>
-                </div>
-              </Form>
-            </div>
+
+  const Step2Form = () => {
+    return (
+      <>
+        <div className="row">
+          <div className="col-xs-12 col-md-12">
+            <Form.Item
+              name="Description"
+              label="Description"
+              rules={[
+                { required: true, message: 'Kindly provide a description for this Multinational' },
+              ]}
+            >
+              <TextArea
+                rows={4}
+                placeholder="Please provide text that best describes this corporation"
+              />
+            </Form.Item>
           </div>
         </div>
-        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div className="row">
+          <div className="col-xs-12 col-md-6">
+            <Form.Item
+              name="Address"
+              label="Address (Line 1)"
+              rules={[
+                {
+                  required: true,
+                  message: 'Kindly enter a location/address for this multi-national',
+                },
+              ]}
+            >
+              <Input placeholder="Address Line 1" />
+            </Form.Item>
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <Form.Item name="Address 2" label="Address (Line 2)">
+              <Input placeholder="Address Line 2" />
+            </Form.Item>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 col-md-6">
+            <Form.Item
+              name="City"
+              label="City"
+              rules={[
+                { required: true, message: 'Please enter the city this corporation is located' },
+              ]}
+            >
+              <Input placeholder="City" />
+            </Form.Item>
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <Form.Item
+              name="Digital Address"
+              label="Digital Address"
+              rules={[{ required: true, message: 'Kindly provide this business digital address' }]}
+            >
+              <Input placeholder="Digital address (Eg: GHA-334433)" />
+            </Form.Item>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  const Step3Form = () => {
+    return (
+      <>
+        <Form.List name="diseases">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(field => (
+                <Space
+                  key={field.key}
+                  style={{ display: 'flex', marginBottom: 8, width: '100%' }}
+                  align="baseline"
+                >
+                  <div className="row">
+                    <div className="col-xs-12 col-md-5 col-lg-5">
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'Disease']}
+                        fieldKey={[field.fieldKey, 'Disease']}
+                        rules={[{ required: true, message: 'Select a disease area' }]}
+                      >
+                        <Select placeholder="Select a disease">
+                          <Option key="malaria" value="malaria">
+                            Malaria
+                          </Option>
+                          {/* {diseaseOptions.map(disease => (
+                            <Option key={disease.id} value={disease.Name}>{disease.Name}</Option>
+                          ))} */}
+                        </Select>
+                      </Form.Item>
+                    </div>
+                    <div className="col-xs-10 col-md-5 col-lg-5">
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'Medication']}
+                        fieldKey={[field.fieldKey, 'Medication']}
+                        rules={[{ required: true, message: 'Enter medication for this disease' }]}
+                      >
+                        <Input placeholder="Medication name" />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xs-2 col-md-2 col-lg-2">
+                      <MinusCircleOutlined onClick={() => remove(field.name)} />
+                    </div>
+                  </div>
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                  Add field
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      </>
+    )
+  }
+
+  const onFinish = () => {
+    const multinationalsRef = firebase.firebaseDatabase.ref('multinationals')
+    const postKey = multinationalsRef.push().key
+    const formData = stepForm.getFieldsValue()
+    multinationalsRef.child(postKey).set(
+      {
+        createdAt: dayjs().format(),
+        ...formData,
+      },
+      function(err) {
+        if (err) {
+          notification.warning({
+            message: err.code,
+            description: err.message,
+          })
+        } else {
+          notification.success({
+            message: 'Success',
+            description: 'Multinational was successfully added',
+          })
+          stepForm.resetFields()
+        }
+      },
+    )
+  }
+
+  const steps = [
+    {
+      step: 1,
+      title: 'Introduction',
+      content: <Step1Form />,
+    },
+    {
+      step: 2,
+      title: 'Details',
+      content: <Step2Form />,
+    },
+    {
+      step: 3,
+      title: 'Disease Area',
+      content: <Step3Form />,
+    },
+  ]
+
+  return (
+    <div>
+      <Helmet title="Dashboard: Onboard Multinational" />
+      <div className="air__utils__heading">
+        <h5>Dashboard: Onboard Multinational</h5>
+      </div>
+      <div className="row">
+        <div className="col-xs-12 col-md-12 col-lg-12">
           <div className="card">
             <div className="card-body">
-              <div className="text-dark font-size-18 font-weight-bold mb-1">
-                Existing Multinationals
-              </div>
-              <Table columns={vendorColumns} dataSource={multinationals} />
+              <p>Please fill out the form to complete the onboarding process for multinational</p>
+              <Form layout="vertical" form={stepForm} onFinish={onFinish}>
+                <StepPanel steps={steps} />
+              </Form>
             </div>
           </div>
         </div>
@@ -143,4 +232,4 @@ const OnboardMultiNationals = props => {
   )
 }
 
-export default connect(mapStateToProps)(OnboardMultiNationals)
+export default OnboardMultiNationals
