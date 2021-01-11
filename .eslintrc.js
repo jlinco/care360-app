@@ -14,6 +14,7 @@ module.exports = {
         ]
       }
     ],
+    "no-return-assign": "off",
     "no-useless-escape": "off",
     "no-script-url": "off",
     "jsx-a11y/anchor-has-content": "off",

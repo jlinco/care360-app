@@ -61,7 +61,7 @@ const routes = [
   },
   {
     path: '/onboarding/multinationals',
-    Component: lazy(() => import('pages/onboarding/multinationals')),
+    Component: lazy(() => import('pages/onboarding/multinationals/index.js')),
     exact: true,
   },
   {
