@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { NavLink } from 'react-router-dom'
 import { Table } from 'antd'
+import ACL from '../../../components/@airui/system/ACL'
 // import { selectPatients } from '../../../redux/patients/selectors'
 import Chart1 from '../../../components/@kit/widgets/Charts/1' // @kit/widgets/Charts/1
 import Chart2 from '../../../components/@kit/widgets/Charts/2'
@@ -88,72 +89,74 @@ const DashboardAnalytics = props => {
     },
   ]
   return (
-    <div>
-      <Helmet title="Dashboard: Overview" />
-      <div className="air__utils__heading">
-        <h5>Dashboard: Overview</h5>
-      </div>
-      <div className="row">
-        <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-          <h5 className="text-dark mb-4">Care360 Analytics Home</h5>
-          <div className="card">
-            <div className="card-body">
-              <div className="text-dark font-size-18 font-weight-bold mb-1">Current Patients</div>
-              <Table columns={patientColumns} dataSource={patients} />
-            </div>
-          </div>
+    <ACL roles={['admin', 'multinational', 'manager', 'support']} redirect>
+      <div>
+        <Helmet title="Dashboard: Overview" />
+        <div className="air__utils__heading">
+          <h5>Dashboard: Overview</h5>
         </div>
-        <div className="col-xl-8 col-lg-6">
-          <div className="card">
-            <Chart2 />
-          </div>
-          <div className="row">
-            <div className="col-xl-6 col-lg-12">
-              <div className="card">
-                <div className="card-body">
-                  <Chart9 />
-                </div>
-              </div>
-              <h5 className="text-dark mb-4">How do you acquire users?</h5>
-              <div className="card">
-                <div className="card-body">
-                  <Chart5 />
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-6 col-lg-12">
-              <div className="card">
-                <div className="card-body">
-                  <Chart10 />
-                </div>
-              </div>
-              <h5 className="text-dark mb-4">How are your active users trending over time?</h5>
-              <div className="card">
-                <div className="card-body">
-                  <Chart1 />
-                </div>
+        <div className="row">
+          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <h5 className="text-dark mb-4">Care360 Analytics Home</h5>
+            <div className="card">
+              <div className="card-body">
+                <div className="text-dark font-size-18 font-weight-bold mb-1">Current Patients</div>
+                <Table columns={patientColumns} dataSource={patients} />
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-xl-4 col-lg-6">
-          {/* <h5 className="text-dark mb-4">Ask analytics Intelligence</h5>
+          <div className="col-xl-8 col-lg-6">
+            <div className="card">
+              <Chart2 />
+            </div>
+            <div className="row">
+              <div className="col-xl-6 col-lg-12">
+                <div className="card">
+                  <div className="card-body">
+                    <Chart9 />
+                  </div>
+                </div>
+                <h5 className="text-dark mb-4">How do you acquire users?</h5>
+                <div className="card">
+                  <div className="card-body">
+                    <Chart5 />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6 col-lg-12">
+                <div className="card">
+                  <div className="card-body">
+                    <Chart10 />
+                  </div>
+                </div>
+                <h5 className="text-dark mb-4">How are your active users trending over time?</h5>
+                <div className="card">
+                  <div className="card-body">
+                    <Chart1 />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-xl-4 col-lg-6">
+            {/* <h5 className="text-dark mb-4">Ask analytics Intelligence</h5>
           <div className="card">
             <div className="card-body">
               <List15 />
             </div>
           </div> */}
-          <div className="card">
-            <div className="card-body">
-              <div className="text-dark font-size-18 font-weight-bold mb-1">
-                What are your top medicines?
+            <div className="card">
+              <div className="card-body">
+                <div className="text-dark font-size-18 font-weight-bold mb-1">
+                  What are your top medicines?
+                </div>
+                <List12 />
               </div>
-              <List12 />
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </ACL>
   )
 }
 

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import dayjs from 'dayjs'
-import { Form, Input, Space, Select, Button, notification } from 'antd'
+import { Form, Input, Space, Select, Button, notification, Spin } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import StepPanel from './StepPanel'
+import StepPanel from '../../../components/care360/onboarding/wizardPanel/StepPanel'
+import ACL from '../../../components/@airui/system/ACL'
 import * as firebase from '../../../services/firebase'
 import { getDiseasesApi } from '../../../services/apis/diseases'
 
@@ -12,32 +13,84 @@ const { TextArea } = Input
 
 const OnboardMultiNationals = () => {
   const [stepForm] = Form.useForm()
-  // const [diseaseOptions, setDiseaseOptions] = useState([])
+  const [diseaseOptions, setDiseaseOptions] = useState([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     // let mounted = true
-    getDiseasesApi().then(item => {
-      console.log(item)
+    getDiseasesApi().then(diseases => {
+      const formattedDiseases = diseases.map(rec => ({
+        id: rec.id,
+        ...rec.fields,
+      }))
+      setDiseaseOptions(formattedDiseases)
     })
   }, [])
 
   const Step1Form = () => {
     return (
       <>
-        <Form.Item
-          name="Name"
-          label="Name"
-          rules={[{ required: true, message: 'Kindly enter a name for this Multinational' }]}
-        >
-          <Input placeholder="Enter corporation name here" />
-        </Form.Item>
-        <Form.Item
-          name="Alias"
-          label="Alias"
-          rules={[{ required: true, message: 'Kindly enter an alias for this multi-national' }]}
-        >
-          <Input placeholder="Enter alias for this multinational" />
-        </Form.Item>
+        <div className="row">
+          <div className="col-xs-12 col-md-4">
+            <Form.Item
+              name="Name"
+              label="Name"
+              rules={[{ required: true, message: 'Kindly enter a name for this Multinational' }]}
+            >
+              <Input placeholder="Enter corporation name here" />
+            </Form.Item>
+          </div>
+          <div className="col-xs-12 col-md-4">
+            <Form.Item
+              name="Alias"
+              label="Alias"
+              rules={[{ required: true, message: 'Kindly enter an alias for this multi-national' }]}
+            >
+              <Input placeholder="Enter alias for this multinational" />
+            </Form.Item>
+          </div>
+          <div className="col-xs-12 col-md-4">
+            <Form.Item
+              name="ContactPerson"
+              label="Contact Person"
+              rules={[
+                {
+                  required: true,
+                  message: 'Kindly enter a contact person for this multi-national',
+                },
+              ]}
+            >
+              <Input placeholder="Enter alias for this multinational" />
+            </Form.Item>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-4">
+            <Form.Item
+              name="Email"
+              label="Email Address"
+              rules={[
+                { required: true, type: 'email', message: 'Please enter a valid email address' },
+              ]}
+            >
+              <Input placeholder="Multinational Email Address" />
+            </Form.Item>
+          </div>
+          <div className="col-md-4">
+            <Form.Item
+              name="PhoneNumber"
+              label="Phone Number"
+              rules={[{ required: true, message: 'Please provide a working contact number' }]}
+            >
+              <Input placeholder="Contact number" />
+            </Form.Item>
+          </div>
+          <div className="col-md-4">
+            <Form.Item name="Website" label="Website">
+              <Input placeholder="https://www.website.com" />
+            </Form.Item>
+          </div>
+        </div>
       </>
     )
   }
@@ -129,12 +182,14 @@ const OnboardMultiNationals = () => {
                         rules={[{ required: true, message: 'Select a disease area' }]}
                       >
                         <Select placeholder="Select a disease">
-                          <Option key="malaria" value="malaria">
+                          {/* <Option key="malaria" value="malaria">
                             Malaria
-                          </Option>
-                          {/* {diseaseOptions.map(disease => (
-                            <Option key={disease.id} value={disease.Name}>{disease.Name}</Option>
-                          ))} */}
+                          </Option> */}
+                          {diseaseOptions.map(disease => (
+                            <Option key={disease.id} value={disease.Name}>
+                              {disease.Name}
+                            </Option>
+                          ))}
                         </Select>
                       </Form.Item>
                     </div>
@@ -170,26 +225,33 @@ const OnboardMultiNationals = () => {
     const multinationalsRef = firebase.firebaseDatabase.ref('multinationals')
     const postKey = multinationalsRef.push().key
     const formData = stepForm.getFieldsValue()
-    multinationalsRef.child(postKey).set(
-      {
-        createdAt: dayjs().format(),
-        ...formData,
-      },
-      function(err) {
-        if (err) {
-          notification.warning({
-            message: err.code,
-            description: err.message,
-          })
-        } else {
-          notification.success({
-            message: 'Success',
-            description: 'Multinational was successfully added',
-          })
-          stepForm.resetFields()
-        }
-      },
-    )
+    setLoading(true)
+    multinationalsRef.child(postKey).set({ createdAt: dayjs().format(), ...formData }, err => {
+      setLoading(false)
+      if (err) {
+        notification.warning({
+          message: err.code,
+          description: err.message,
+        })
+        stepForm.resetFields()
+      } else {
+        notification.success({
+          message: 'Success',
+          description: 'Multinational was successfully added',
+        })
+        stepForm.resetFields()
+      }
+    })
+    // multinationalsRef.child(postKey).set(
+    //   {
+    //     createdAt: dayjs().format(),
+    //     ...formData,
+    //   },
+    //   function(err) {
+    //     setLoading(false)
+
+    //   },
+    // )
   }
 
   const steps = [
@@ -211,24 +273,30 @@ const OnboardMultiNationals = () => {
   ]
 
   return (
-    <div>
-      <Helmet title="Dashboard: Onboard Multinational" />
-      <div className="air__utils__heading">
-        <h5>Dashboard: Onboard Multinational</h5>
-      </div>
-      <div className="row">
-        <div className="col-xs-12 col-md-12 col-lg-12">
-          <div className="card">
-            <div className="card-body">
-              <p>Please fill out the form to complete the onboarding process for multinational</p>
-              <Form layout="vertical" form={stepForm} onFinish={onFinish}>
-                <StepPanel steps={steps} />
-              </Form>
+    <ACL roles={['admin']} redirect>
+      <div>
+        <Helmet title="Dashboard: Onboard Multinational" />
+        <div className="air__utils__heading">
+          <h5>Dashboard: Onboard Multinational</h5>
+        </div>
+        <Spin size="large" spinning={loading}>
+          <div className="row">
+            <div className="col-xs-12 col-md-12 col-lg-12">
+              <div className="card">
+                <div className="card-body">
+                  <p>
+                    Please fill out the form to complete the onboarding process for multinational
+                  </p>
+                  <Form layout="vertical" form={stepForm} onFinish={onFinish}>
+                    <StepPanel steps={steps} />
+                  </Form>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </Spin>
       </div>
-    </div>
+    </ACL>
   )
 }
 
