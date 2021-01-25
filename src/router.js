@@ -74,6 +74,11 @@ const routes = [
     Component: lazy(() => import('pages/onboarding/hospitals')),
     exact: true,
   },
+  {
+    path: '/onboarding/users',
+    Component: lazy(() => import('pages/onboarding/users')),
+    exact: true,
+  },
   // {
   //   path: '/dashboard/statistics',
   //   Component: lazy(() => import('pages/dashboard/statistics')),
