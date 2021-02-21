@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 import dayjs from 'dayjs'
 import { Form, Input, Space, Select, Button, notification, Spin } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import StepPanel from '../../../components/care360/onboarding/wizardPanel/StepPanel'
+import StepPanel from '../../../components/care360/wizardPanel/StepPanel'
 import ACL from '../../../components/@airui/system/ACL'
 import * as firebase from '../../../services/firebase'
 import { getDiseasesApi } from '../../../services/apis/diseases'
@@ -80,7 +80,11 @@ const OnboardMultiNationals = () => {
             <Form.Item
               name="PhoneNumber"
               label="Phone Number"
-              rules={[{ required: true, message: 'Please provide a working contact number' }]}
+              rules={[
+                { required: true, message: 'Please provide a working contact number' },
+                { pattern: /[0-9]/, message: 'Please enter a valid phone number' },
+                { len: 10, message: 'Your number is invalid' },
+              ]}
             >
               <Input placeholder="Contact number" />
             </Form.Item>

@@ -1,5 +1,5 @@
 {
-  "labels": ["Airport City", "Dzorwulu", "Kumasi"],
+  "labels": ["Breast Cancer", "Hypertension", "Depression"],
   "datasets": [
     {
       "data": [45, 45, 45],

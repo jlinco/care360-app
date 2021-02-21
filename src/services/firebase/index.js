@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import { notification } from 'antd'
 import 'firebase/auth'
 import 'firebase/database'
+import 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDDa1LHcD5SLbvjVfy5YN7E2P3KaCmmQeE',
@@ -18,6 +19,7 @@ firebase.initializeApp(firebaseConfig)
 // firebase.analytics()
 export const firebaseAuth = firebase.auth()
 export const firebaseDatabase = firebase.database()
+export const firebaseStorage = firebase.storage()
 
 export async function login(email, password) {
   return firebaseAuth

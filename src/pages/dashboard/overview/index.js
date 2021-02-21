@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { NavLink } from 'react-router-dom'
 import { Table } from 'antd'
 import ACL from '../../../components/@airui/system/ACL'
+import { getPatientsOnce } from '../../../services/apis/patients'
+import { getMultinationalsOnce } from '../../../services/apis/multinationals'
 // import { selectPatients } from '../../../redux/patients/selectors'
 import Chart1 from '../../../components/@kit/widgets/Charts/1' // @kit/widgets/Charts/1
 import Chart2 from '../../../components/@kit/widgets/Charts/2'
@@ -22,52 +24,74 @@ const mapStateToProps = state => {
   }
 }
 
-const DashboardAnalytics = props => {
-  const { appState } = props
-  const {
-    patients: { patients },
-  } = appState
+const DashboardAnalytics = () => {
+  const [patients, setPatients] = useState(null)
+  const [multinationals, setMultinationals] = useState(null)
+
+  useEffect(() => {
+    const abortController = new AbortController()
+    const { signal } = abortController
+
+    getPatientsOnce({ signal }).then(patientss => {
+      const multis = patientss.val()
+      const multiArr = Object.keys(multis).map(key => ({
+        id: key,
+        ...multis[key],
+      }))
+      // localStorage.setItem('multiNationals', JSON.stringify(multiArr))
+      setPatients(multiArr)
+    })
+    return function cleanup() {
+      abortController.abort()
+    }
+  }, [])
+
+  useEffect(() => {
+    const abortController = new AbortController()
+    const { signal } = abortController
+    getMultinationalsOnce({ signal }).then(providers => {
+      const multis = providers.val()
+      const multiArr = Object.keys(multis).map(key => ({
+        id: key,
+        ...multis[key],
+      }))
+      localStorage.setItem('multiNationals', JSON.stringify(multiArr))
+      setMultinationals(multiArr)
+    })
+    return function cleanup() {
+      abortController.abort()
+    }
+  }, [])
+
   const patientColumns = [
     {
-      title: 'Last Name',
-      dataIndex: 'Last Name',
-      key: 'Last Name',
-      className: 'text-gray-6',
-    },
-    {
-      title: 'First Name',
-      dataIndex: 'First Name',
-      key: 'First Name',
+      title: 'Patient ID',
+      dataIndex: 'id',
+      key: 'id',
       className: 'text-gray-6',
     },
     {
       title: 'Email Address',
-      dataIndex: 'Email Address',
-      key: 'Email Address',
+      dataIndex: 'PatientEmail',
+      key: 'PatientEmail',
       className: 'text-gray-6',
     },
     {
       title: 'Contact Mode',
-      dataIndex: 'Contact Mode',
-      key: 'Contact Mode',
+      dataIndex: 'ModeOfContact',
+      key: 'ModeOfContact',
       className: 'text-gray-6',
     },
     {
       title: 'Phone Number',
-      dataIndex: 'Phone Number',
-      key: 'Phone Number',
+      dataIndex: 'PhoneNumber',
+      key: 'PhoneNumber',
       className: 'text-gray-6',
     },
     {
       title: 'Medical Condition',
-      dataIndex: 'Medical Condition',
-      key: 'Medical Condition',
-      className: 'text-gray-6',
-    },
-    {
-      title: 'Specilist / Physician',
-      dataIndex: 'Specialist / Physician',
-      key: 'Specialist / Physician',
+      dataIndex: 'Ailment',
+      key: 'Ailment',
       className: 'text-gray-6',
     },
     {
@@ -88,8 +112,52 @@ const DashboardAnalytics = props => {
       },
     },
   ]
+
+  const multinationalsColumn = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      className: 'text-gray-6',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'Name',
+      key: 'Name',
+      className: 'text-gray-6',
+    },
+    {
+      title: 'Contact',
+      dataIndex: 'ContactPerson',
+      key: 'ContactPerson',
+      className: 'text-gray-6',
+    },
+    {
+      title: 'Phone Number',
+      dataIndex: 'PhoneNumber',
+      key: 'PhoneNumber',
+      className: 'text-gray-6',
+    },
+    {
+      dataIndex: 'action',
+      key: 'action',
+      render: (row, index) => {
+        // console.log(index)
+        // console.log(row)
+        return (
+          <div>
+            <NavLink to={`/dashboard/multinationals/${index.id}`}>
+              <button type="button" className="btn btn-outline-info mr-2 mb-2" data-row={row}>
+                See More
+              </button>
+            </NavLink>
+          </div>
+        )
+      },
+    },
+  ]
   return (
-    <ACL roles={['admin', 'multinational', 'manager', 'support']} redirect>
+    <ACL roles={['admin', 'manager', 'support']} redirect>
       <div>
         <Helmet title="Dashboard: Overview" />
         <div className="air__utils__heading">
@@ -98,10 +166,18 @@ const DashboardAnalytics = props => {
         <div className="row">
           <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
             <h5 className="text-dark mb-4">Care360 Analytics Home</h5>
-            <div className="card">
+            <div className="card mb-4">
               <div className="card-body">
                 <div className="text-dark font-size-18 font-weight-bold mb-1">Current Patients</div>
                 <Table columns={patientColumns} dataSource={patients} />
+              </div>
+            </div>
+            <div className="card mb-4">
+              <div className="card-body">
+                <div className="text-dark font-size-18 font-weight-bold mb-1">
+                  Current Multinationals
+                </div>
+                <Table columns={multinationalsColumn} dataSource={multinationals} />
               </div>
             </div>
           </div>
