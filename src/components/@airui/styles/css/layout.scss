@@ -31,6 +31,9 @@
     &__cardsShadow {
       .card {
         box-shadow: $shadow-4;
+        &.card-top-primary {
+          border-top: solid 4px $care360;
+        }
         .card {
           box-shadow: none;
         }

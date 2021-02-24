@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-// import { Form, Input, Upload, Button, Tabs } from 'antd'
+import { Tabs } from 'antd'
 // import { InboxOutlined } from '@ant-design/icons';
 import { getPatientById } from '../../../services/apis/patients'
 import PatientIntro from '../../../components/care360/patients/patientIntro'
 import PatientHeader from '../../../components/care360/patients/patientHeader'
 import PatientContactPerson from '../../../components/care360/patients/patientContactPerson'
 import TreatmentTimeline from '../../../components/care360/patients/treatmentTimeline'
+// import TreatmentCalendar from '../../../components/care360/patients/treatmentCalendar'
+// import PatientProfile from '../../../components/care360/patients/patientProfile'
 
+const { TabPane } = Tabs
 const mapStateToProps = state => {
   return {
     appState: state,
@@ -22,6 +25,11 @@ const PatientDetails = props => {
     },
   } = props
   const [patientData, setPatientData] = useState(null)
+  const [tabKey, setTabKey] = useState('1')
+
+  const changeTab = key => {
+    setTabKey(key)
+  }
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -44,7 +52,7 @@ const PatientDetails = props => {
       </div>
       <div className="row">
         <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-          <div className="card">
+          <div className="card card-top-primary">
             <div className="card-body">
               {patientData && <PatientIntro patientData={patientData} />}
             </div>
@@ -61,10 +69,22 @@ const PatientDetails = props => {
           </div>
         </div>
         <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12">
-          <div className="card">
+          <div className="card card-top-primary">
             <div className="card-header card-header-flex flex-column">
               {patientData && <PatientHeader patientData={patientData} patientId={patientId} />}
+              <Tabs activeKey={tabKey} className="mr-auto kit-tabs-bold" onChange={changeTab}>
+                <TabPane tab="Treatment Calendar" key="1" />
+                <TabPane tab="Profile" key="2" />
+              </Tabs>
             </div>
+            {/* <div className="card-body">
+              {tabKey === '1' && (
+                <div><TreatmentCalendar patientData={patientData} /></div>
+              )}
+              {tabKey === '2' && (
+                <div><PatientProfile patientData={patientData} /></div>
+              )}
+            </div> */}
           </div>
         </div>
       </div>
