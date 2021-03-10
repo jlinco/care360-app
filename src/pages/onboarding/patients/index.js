@@ -16,6 +16,7 @@ import { getMultinationalsOnce } from '../../../services/apis/multinationals'
 // }
 const { Option } = Select
 const { TextArea } = Input
+const { RangePicker } = DatePicker
 const dateFormat = 'YYYY/MM/DD'
 
 // const normFile = (e) => {
@@ -486,7 +487,7 @@ const OnboardPatients = () => {
                               },
                             ]}
                           >
-                            <DatePicker style={{ width: '100%' }} format={dateFormat} />
+                            <RangePicker style={{ width: '100%' }} format={dateFormat} />
                           </Form.Item>
                         </div>
                         <div className="col-xs-10 col-md-5 col-lg-5">
@@ -578,8 +579,9 @@ const OnboardPatients = () => {
     if (formData.WhatsAppNumber === undefined) formData.WhatsAppNumber = 'N/A'
     const { treatmentPlan } = formData
     const tp = treatmentPlan.map(ttp => ({
-      ...ttp,
-      DateOfDosage: moment(ttp.DateOfDosage).format('YYYY-MM-DD'),
+      dosage: ttp.Dosage,
+      dosageStartDate: moment(ttp.DateOfDosage[0]).format('YYYY-MM-DD'),
+      dosageEndDate: moment(ttp.DateOfDosage[1]).format('YYYY-MM-DD'),
     }))
     const newData = { ...formData, treatmentPlan: tp }
     const multinational = formData.Multinational
@@ -587,6 +589,7 @@ const OnboardPatients = () => {
     const updates = {}
     updates[`/patients/${newPostKey}`] = newData
     updates[`/multinationals/${multinational}/patients/${newPostKey}`] = newData
+    console.log(newData)
     firebase.firebaseDatabase.ref().update(updates, err => {
       setLoading(false)
       if (err) {
