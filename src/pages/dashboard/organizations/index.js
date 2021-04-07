@@ -23,27 +23,31 @@ const mapStateToProps = state => {
   }
 }
 
-const Multinationals = () => {
-  const [multinationals, setMultinationals] = useState(null)
+const Organizations = () => {
+  const [organizations, setOrganizations] = useState(null)
 
   useEffect(() => {
     const abortController = new AbortController()
     const { signal } = abortController
     getMultinationalsOnce({ signal }).then(providers => {
       const multis = providers.val()
-      const multiArr = Object.keys(multis).map(key => ({
-        id: key,
-        ...multis[key],
-      }))
-      localStorage.setItem('multiNationals', JSON.stringify(multiArr))
-      setMultinationals(multiArr)
+      if (multis) {
+        const multiArr = Object.keys(multis).map(key => ({
+          id: key,
+          ...multis[key],
+        }))
+        localStorage.setItem('multiNationals', JSON.stringify(multiArr))
+        setOrganizations(multiArr)
+      } else {
+        setOrganizations([])
+      }
     })
     return function cleanup() {
       abortController.abort()
     }
   }, [])
 
-  const multinationalsColumn = [
+  const organizationsColumn = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -91,7 +95,7 @@ const Multinationals = () => {
       <div>
         <Helmet title="Multinationals: Overview" />
         <div className="air__utils__heading">
-          <h5>Multinationals: Overview</h5>
+          <h5>Organizations: Overview</h5>
         </div>
         <div className="row">
           <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -99,9 +103,9 @@ const Multinationals = () => {
             <div className="card">
               <div className="card-body">
                 <div className="text-dark font-size-18 font-weight-bold mb-1">
-                  Current Multinational Data
+                  Current Organization Data
                 </div>
-                <Table columns={multinationalsColumn} dataSource={multinationals} />
+                <Table columns={organizationsColumn} dataSource={organizations} />
               </div>
             </div>
           </div>
@@ -154,4 +158,4 @@ const Multinationals = () => {
   )
 }
 
-export default connect(mapStateToProps)(Multinationals)
+export default connect(mapStateToProps)(Organizations)

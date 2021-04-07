@@ -17,7 +17,7 @@ const List12 = () => {
                   Paracetamol
                 </td>
                 <td className="text-right">
-                  <strong>+78,366,263.00$</strong>
+                  <strong>78,366,263.00</strong>
                 </td>
               </tr>
               <tr>
@@ -26,7 +26,7 @@ const List12 = () => {
                   Coartem
                 </td>
                 <td className="text-right">
-                  <strong>+58,165,000.00$</strong>
+                  <strong>58,165,000.00</strong>
                 </td>
               </tr>
               <tr>
@@ -35,7 +35,7 @@ const List12 = () => {
                   Iron Supplements
                 </td>
                 <td className="text-right">
-                  <strong>+26,156,267.00$</strong>
+                  <strong>+26,156,267.00</strong>
                 </td>
               </tr>
               <tr>
@@ -44,7 +44,7 @@ const List12 = () => {
                   Ablify (aripiprazole)
                 </td>
                 <td className="text-right">
-                  <strong>+18,823,026.00$</strong>
+                  <strong>+18,823,026.00</strong>
                 </td>
               </tr>
               <tr>
@@ -53,7 +53,7 @@ const List12 = () => {
                   Excedrin
                 </td>
                 <td className="text-right">
-                  <strong>+8,125,642.00$</strong>
+                  <strong>+8,125,642.00</strong>
                 </td>
               </tr>
             </tbody>

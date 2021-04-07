@@ -40,8 +40,9 @@ const OnboardPatients = () => {
   const [patientForm] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const [diseaseOptions, setDiseaseOptions] = useState([])
-  const [multinationals, setMultinationals] = useState([])
+  const [organizations, setOrganizations] = useState([])
   const [isProviderPrivate, setIsProviderPrivate] = useState(true)
+  const [isRecurring, setIsRecurring] = useState(false)
   // const [selectedFile, setSelectedFile] = useState(null)
   // const [selectedFileList, setSelectedFileList] = useState([])
   // const [AvatarUrl, setAvatarUrl] = useState('')
@@ -52,12 +53,16 @@ const OnboardPatients = () => {
 
     getMultinationalsOnce({ signal }).then(providers => {
       const multis = providers.val()
-      const multiArr = Object.keys(multis).map(key => ({
-        id: key,
-        ...multis[key],
-      }))
-      localStorage.setItem('multiNationals', JSON.stringify(multiArr))
-      setMultinationals(multiArr)
+      if (multis) {
+        const multiArr = Object.keys(multis).map(key => ({
+          id: key,
+          ...multis[key],
+        }))
+        localStorage.setItem('organizations', JSON.stringify(multiArr))
+        setOrganizations(multiArr)
+      } else {
+        setOrganizations([])
+      }
     })
     return function cleanup() {
       abortController.abort()
@@ -279,12 +284,12 @@ const OnboardPatients = () => {
         <div className="row">
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <Form.Item
-              name="Multinational"
-              label="Multinational"
+              name="Organization"
+              label="Organization"
               rules={[{ required: true, message: 'Please select the appropriate Multinational' }]}
             >
               <Select placeholder="Select multinational" onChange={onMultinationalChange}>
-                {multinationals.map(multi => (
+                {organizations.map(multi => (
                   <Option key={multi.id} value={multi.id}>
                     {multi.Name}
                   </Option>
@@ -292,7 +297,7 @@ const OnboardPatients = () => {
               </Select>
             </Form.Item>
           </div>
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+          <div className="col-xs-12 col-sm-12 col-md-2 col-lg-2">
             <Form.Item
               name="Ailment"
               label="Ailment"
@@ -309,6 +314,27 @@ const OnboardPatients = () => {
                     {disease.Disease}
                   </Option>
                 ))}
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <Form.Item
+              name="DiseaseType"
+              label="Type"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select a type',
+                },
+              ]}
+            >
+              <Select placeholder="Please select a multinational first" onChange={onDiseaseChange}>
+                <Option key="Finite" value="Finite">
+                  Finite
+                </Option>
+                <Option key="Indefinite" value="Indefinite">
+                  Indefinite
+                </Option>
               </Select>
             </Form.Item>
           </div>
@@ -360,7 +386,7 @@ const OnboardPatients = () => {
           </div>
         </div>
         <div className="row">
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+          {/* <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <Form.Item
               name="Description"
               label="Description (Medical Condition)"
@@ -373,8 +399,8 @@ const OnboardPatients = () => {
             >
               <TextArea placeholder="Description of medical condition" rows={4} />
             </Form.Item>
-          </div>
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+          </div> */}
+          <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <Form.Item
               name="Diagnosis"
               label="Medical Diagnosis"
@@ -385,9 +411,9 @@ const OnboardPatients = () => {
               <TextArea placeholder="Physician's full diagnosis" rows={4} />
             </Form.Item>
           </div>
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+          <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <Form.Item name="Notes" label="Notes">
-              <TextArea placeholder="Notes(additional information" rows={4} />
+              <TextArea placeholder="Notes (any additional information)" rows={4} />
             </Form.Item>
           </div>
         </div>
@@ -451,6 +477,12 @@ const OnboardPatients = () => {
                 <Option key="privateInsurer" value="privateInsurer">
                   Private Insurer
                 </Option>
+                <Option key="employer" value="employer">
+                  Employer
+                </Option>
+                <Option key="other" value="other">
+                  Other
+                </Option>
               </Select>
             </Form.Item>
           </div>
@@ -475,10 +507,41 @@ const OnboardPatients = () => {
                       align="baseline"
                     >
                       <div className="row">
-                        <div className="col-xs-12 col-md-5 col-lg-5">
+                        <div className="col-xs-12 col-md-2 col-lg-2">
+                          <Form.Item
+                            {...field}
+                            name={[field.name, 'Medication']}
+                            label="Medication"
+                            fieldKey={[field.fieldKey, 'Medication']}
+                          >
+                            <Input placeholder="Enter medication name" />
+                          </Form.Item>
+                        </div>
+                        <div className="col-xs-12 col-md-3 col-lg-3">
+                          <Form.Item
+                            {...field}
+                            name={[field.name, 'Occurence']}
+                            label="Occurence (how often medication is taken)"
+                            fieldKey={[field.fieldKey, 'Occurence']}
+                          >
+                            <Select
+                              placeholder="Select treatment occurence"
+                              onChange={onOccurenceChange}
+                            >
+                              <Option key="chronic" value="chronic">
+                                Indefinite
+                              </Option>
+                              <Option key="temporal" value="temporal">
+                                Finite
+                              </Option>
+                            </Select>
+                          </Form.Item>
+                        </div>
+                        <div className="col-xs-12 col-md-3 col-lg-3">
                           <Form.Item
                             {...field}
                             name={[field.name, 'DateOfDosage']}
+                            label="Treatment Period"
                             fieldKey={[field.fieldKey, 'DateOfDosage']}
                             rules={[
                               {
@@ -487,13 +550,18 @@ const OnboardPatients = () => {
                               },
                             ]}
                           >
-                            <RangePicker style={{ width: '100%' }} format={dateFormat} />
+                            <RangePicker
+                              style={{ width: '100%' }}
+                              format={dateFormat}
+                              disabled={[false, isRecurring]}
+                            />
                           </Form.Item>
                         </div>
-                        <div className="col-xs-10 col-md-5 col-lg-5">
+                        <div className="col-xs-10 col-md-2 col-lg-2">
                           <Form.Item
                             {...field}
                             name={[field.name, 'Dosage']}
+                            label="Dosage"
                             fieldKey={[field.fieldKey, 'Dosage']}
                             rules={[
                               {
@@ -505,7 +573,7 @@ const OnboardPatients = () => {
                             <Input placeholder="Enter dosage. eg: 2 tabs 3x daily" />
                           </Form.Item>
                         </div>
-                        <div className="col-xs-2 col-md-2 col-lg-2">
+                        <div className="col-xs-2 col-md-2 col-lg-2 mt-4 pt-2">
                           <MinusCircleOutlined onClick={() => remove(field.name)} />
                         </div>
                       </div>
@@ -613,10 +681,18 @@ const OnboardPatients = () => {
   //   console.log(allValues)
   // }
   const onProviderChange = value => {
-    if (value === 'privateInsurer') {
+    if (value === 'privateInsurer' || value === 'employer' || value === 'other') {
       setIsProviderPrivate(false)
     } else {
       setIsProviderPrivate(true)
+    }
+  }
+
+  const onOccurenceChange = value => {
+    if (value === 'chronic') {
+      setIsRecurring(true)
+    } else {
+      setIsRecurring(false)
     }
   }
 

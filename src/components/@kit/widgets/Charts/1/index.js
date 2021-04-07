@@ -27,13 +27,13 @@ const Chart1 = () => {
       <div className="d-flex flex-wrap mb-3">
         <div className={style.item}>
           <div className="font-size-18 text-dark font-weight-bold">
-            +$12,367.36 <span className="text-success font-size-12 align-text-top">+25%</span>
+            +12,367.36 <span className="text-success font-size-12 align-text-top">+25%</span>
           </div>
-          <div className="text-uppercase text-gray-4">Total sales</div>
+          <div className="text-uppercase text-gray-4">Total Volume</div>
         </div>
         <div className={style.item}>
           <div className="font-size-18 text-dark font-weight-bold">
-            +$5,367.36 <span className="text-danger font-size-12 align-text-top">-76%</span>
+            +5,367.36 <span className="text-danger font-size-12 align-text-top">-6%</span>
           </div>
           <div className="text-uppercase text-gray-4">Avg. Per Day</div>
         </div>

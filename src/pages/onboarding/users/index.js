@@ -95,7 +95,7 @@ const OnboardUsers = () => {
                           <Select placeholder="Select user role">
                             <Option value="admin">Admin</Option>
                             <Option value="caregiver">Caregiver</Option>
-                            <Option value="multinational">Multinational</Option>
+                            <Option value="organization">Organization</Option>
                             <Option value="manager">Manager</Option>
                             <Option value="support">Support</Option>
                           </Select>

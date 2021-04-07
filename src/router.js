@@ -25,13 +25,13 @@ const routes = [
     exact: true,
   },
   {
-    path: '/dashboard/multinationals',
-    Component: lazy(() => import('pages/dashboard/multinationals')),
+    path: '/dashboard/organizations',
+    Component: lazy(() => import('pages/dashboard/organizations')),
     exact: true,
   },
   {
-    path: '/dashboard/multinationals/:multinationalId',
-    Component: lazy(() => import('pages/dashboard/multinationals/multinationalDetails')),
+    path: '/dashboard/organizations/:organizationId',
+    Component: lazy(() => import('pages/dashboard/organizations/organizationDetails')),
     exact: true,
   },
   {
@@ -50,8 +50,8 @@ const routes = [
     exact: true,
   },
   {
-    path: '/management/multinationals',
-    Component: lazy(() => import('pages/management/multinationals')),
+    path: '/management/organizations',
+    Component: lazy(() => import('pages/management/organizations')),
     exact: true,
   },
   {
@@ -60,8 +60,8 @@ const routes = [
     exact: true,
   },
   {
-    path: '/onboarding/multinationals',
-    Component: lazy(() => import('pages/onboarding/multinationals/index.js')),
+    path: '/onboarding/organizations',
+    Component: lazy(() => import('pages/onboarding/organizations/index.js')),
     exact: true,
   },
   {

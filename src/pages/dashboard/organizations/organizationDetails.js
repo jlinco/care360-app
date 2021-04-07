@@ -30,7 +30,7 @@ const mapStateToProps = state => {
   }
 }
 
-const MultiNationalDetails = props => {
+const OrganizationDetails = props => {
   const {
     match: {
       params: { multinationalId },
@@ -167,4 +167,4 @@ const MultiNationalDetails = props => {
   )
 }
 
-export default connect(mapStateToProps)(MultiNationalDetails)
+export default connect(mapStateToProps)(OrganizationDetails)

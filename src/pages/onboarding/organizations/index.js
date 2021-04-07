@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import dayjs from 'dayjs'
 import { Form, Input, Space, Select, Button, notification, Spin } from 'antd'
@@ -6,26 +6,26 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import StepPanel from '../../../components/care360/wizardPanel/StepPanel'
 import ACL from '../../../components/@airui/system/ACL'
 import * as firebase from '../../../services/firebase'
-import { getDiseasesApi } from '../../../services/apis/diseases'
+// import { getDiseasesApi } from '../../../services/apis/diseases'
 
 const { Option } = Select
 const { TextArea } = Input
 
-const OnboardMultiNationals = () => {
+const OnboardOrganizations = () => {
   const [stepForm] = Form.useForm()
-  const [diseaseOptions, setDiseaseOptions] = useState([])
+  // const [diseaseOptions, setDiseaseOptions] = useState([])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    // let mounted = true
-    getDiseasesApi().then(diseases => {
-      const formattedDiseases = diseases.map(rec => ({
-        id: rec.id,
-        ...rec.fields,
-      }))
-      setDiseaseOptions(formattedDiseases)
-    })
-  }, [])
+  // useEffect(() => {
+  //   // let mounted = true
+  //   getDiseasesApi().then(diseases => {
+  //     const formattedDiseases = diseases.map(rec => ({
+  //       id: rec.id,
+  //       ...rec.fields,
+  //     }))
+  //     setDiseaseOptions(formattedDiseases)
+  //   })
+  // }, [])
 
   const Step1Form = () => {
     return (
@@ -178,36 +178,47 @@ const OnboardMultiNationals = () => {
                   align="baseline"
                 >
                   <div className="row">
-                    <div className="col-xs-12 col-md-5 col-lg-5">
+                    <div className="col-xs-12 col-md-4 col-lg-4">
                       <Form.Item
                         {...field}
                         name={[field.name, 'Disease']}
+                        label="Disease Area"
                         fieldKey={[field.fieldKey, 'Disease']}
                         rules={[{ required: true, message: 'Select a disease area' }]}
                       >
-                        <Select placeholder="Select a disease">
-                          {/* <Option key="malaria" value="malaria">
-                            Malaria
-                          </Option> */}
-                          {diseaseOptions.map(disease => (
-                            <Option key={disease.id} value={disease.Name}>
-                              {disease.Name}
-                            </Option>
-                          ))}
-                        </Select>
+                        <Input placeholder="Please enter disease area eg: Malaria" />
                       </Form.Item>
                     </div>
-                    <div className="col-xs-10 col-md-5 col-lg-5">
+                    <div className="col-xs-10 col-md-3 col-lg-3">
                       <Form.Item
                         {...field}
                         name={[field.name, 'Medication']}
                         fieldKey={[field.fieldKey, 'Medication']}
+                        label="Medication"
                         rules={[{ required: true, message: 'Enter medication for this disease' }]}
                       >
                         <Input placeholder="Medication name" />
                       </Form.Item>
                     </div>
-                    <div className="col-xs-2 col-md-2 col-lg-2">
+                    <div className="col-xs-10 col-md-3 col-lg-3">
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'DiseaseType']}
+                        fieldKey={[field.fieldKey, 'DiseaseType']}
+                        label="Disease Type"
+                        rules={[{ required: true, message: 'Please select the disease type' }]}
+                      >
+                        <Select placeholder="Select disease type">
+                          <Option key="Chronic" value="Chronic">
+                            Chronic
+                          </Option>
+                          <Option key="Acute" value="Acute">
+                            Acute
+                          </Option>
+                        </Select>
+                      </Form.Item>
+                    </div>
+                    <div className="col-xs-2 col-md-2 col-lg-2 mt-4 pt-2">
                       <MinusCircleOutlined onClick={() => remove(field.name)} />
                     </div>
                   </div>
@@ -279,9 +290,9 @@ const OnboardMultiNationals = () => {
   return (
     <ACL roles={['admin']} redirect>
       <div>
-        <Helmet title="Dashboard: Onboard Multinational" />
+        <Helmet title="Dashboard: Onboard Organization" />
         <div className="air__utils__heading">
-          <h5>Dashboard: Onboard Multinational</h5>
+          <h5>Dashboard: Onboard Organization</h5>
         </div>
         <Spin size="large" spinning={loading}>
           <div className="row">
@@ -304,4 +315,4 @@ const OnboardMultiNationals = () => {
   )
 }
 
-export default OnboardMultiNationals
+export default OnboardOrganizations

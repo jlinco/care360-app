@@ -9,14 +9,14 @@ export default async function getMenuData() {
       key: 'home',
       icon: 'fe fe-home',
       url: '/dashboard/overview',
-      roles: ['admin', 'multinational', 'manager', 'support'],
+      roles: ['admin', 'organization', 'manager', 'support'],
     },
     {
       title: 'Patients',
       key: 'patients',
       icon: 'fe fe-users',
       url: '/dashboard/patients',
-      roles: ['admin', 'caregiver', 'multinational', 'manager', 'support'],
+      roles: ['admin', 'caregiver', 'organization', 'manager', 'support'],
     },
     // {
     // title: 'Hospitals',
@@ -33,11 +33,11 @@ export default async function getMenuData() {
     //   roles: ['admin', 'medics', 'pharma']
     // },
     {
-      title: 'Multi Nationals',
-      key: 'multiNationals',
+      title: 'Organizations',
+      key: 'organizations',
       icon: 'fe fe-server',
-      url: '/dashboard/multinationals',
-      roles: ['admin', 'multinational', 'manager'],
+      url: '/dashboard/organizations',
+      roles: ['admin', 'manager'],
     },
     // {
     //   category: true,
@@ -52,10 +52,10 @@ export default async function getMenuData() {
     // },
     // {
     //   title: 'Multi Nationals',
-    //   key: 'm_multiNationals',
+    //   key: 'm_organizations',
     //   icon: 'fe fe-server',
-    //   url: '/management/multinationals',
-    //   roles: ['admin', 'multinational', 'manager', 'support'],
+    //   url: '/management/organizations',
+    //   roles: ['admin', 'organization', 'manager', 'support'],
     // },
     // {
     //   title: 'Hospitals',
@@ -69,10 +69,10 @@ export default async function getMenuData() {
       title: 'Onboarding',
     },
     {
-      title: 'Multi Nationals',
-      key: 'o_multiN',
+      title: 'Organizations',
+      key: 'o_organization',
       icon: 'fe fe-server',
-      url: '/onboarding/multinationals',
+      url: '/onboarding/organizations',
       roles: ['admin', 'pharma'],
     },
     {

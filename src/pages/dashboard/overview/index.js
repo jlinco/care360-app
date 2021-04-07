@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { NavLink } from 'react-router-dom'
-import { Table } from 'antd'
+import { Table, Tag } from 'antd'
 import ACL from '../../../components/@airui/system/ACL'
 import { getPatientsOnce } from '../../../services/apis/patients'
 import { getMultinationalsOnce } from '../../../services/apis/multinationals'
 // import { selectPatients } from '../../../redux/patients/selectors'
-import Chart1 from '../../../components/@kit/widgets/Charts/1' // @kit/widgets/Charts/1
-import Chart2 from '../../../components/@kit/widgets/Charts/2'
-import Chart5 from '../../../components/@kit/widgets/Charts/5'
-import Chart9 from '../../../components/@kit/widgets/Charts/9'
-import Chart10 from '../../../components/@kit/widgets/Charts/10'
-import List12 from '../../../components/@kit/widgets/Lists/12'
+// import Chart1 from '../../../components/@kit/widgets/Charts/1' // @kit/widgets/Charts/1
+// import Charts from '../../../components/care360/widgets/charts'
+// import Chart5 from '../../../components/@kit/widgets/Charts/5'
+// import Chart9 from '../../../components/@kit/widgets/Charts/9'
+// import Chart10 from '../../../components/@kit/widgets/Charts/10'
+// import List12 from '../../../components/@kit/widgets/Lists/12'
 // import airtableBase from '../../../services/airtable';
 // import List15 from '../../../components/@kit/widgets/Lists/15'
 const mapStateToProps = state => {
@@ -25,8 +25,8 @@ const mapStateToProps = state => {
 }
 
 const DashboardAnalytics = () => {
-  const [patients, setPatients] = useState(null)
-  const [multinationals, setMultinationals] = useState(null)
+  const [allPatients, setAllPatients] = useState([])
+  const [organizations, setOrganizations] = useState([])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -34,12 +34,16 @@ const DashboardAnalytics = () => {
 
     getPatientsOnce({ signal }).then(patientss => {
       const multis = patientss.val()
-      const multiArr = Object.keys(multis).map(key => ({
-        id: key,
-        ...multis[key],
-      }))
-      // localStorage.setItem('multiNationals', JSON.stringify(multiArr))
-      setPatients(multiArr)
+      if (multis) {
+        const multiArr = Object.keys(multis).map(key => ({
+          id: key,
+          ...multis[key],
+        }))
+        // localStorage.setItem('multiNationals', JSON.stringify(multiArr))
+        setAllPatients(multiArr)
+      } else {
+        setAllPatients([])
+      }
     })
     return function cleanup() {
       abortController.abort()
@@ -51,17 +55,26 @@ const DashboardAnalytics = () => {
     const { signal } = abortController
     getMultinationalsOnce({ signal }).then(providers => {
       const multis = providers.val()
-      const multiArr = Object.keys(multis).map(key => ({
-        id: key,
-        ...multis[key],
-      }))
-      localStorage.setItem('multiNationals', JSON.stringify(multiArr))
-      setMultinationals(multiArr)
+      if (multis) {
+        const multiArr = Object.keys(multis).map(key => ({
+          id: key,
+          ...multis[key],
+        }))
+        localStorage.setItem('organizations', JSON.stringify(multiArr))
+        setOrganizations(multiArr)
+      } else {
+        setOrganizations([])
+      }
     })
     return function cleanup() {
       abortController.abort()
     }
   }, [])
+
+  // const patientGraphCopy = {
+  //   title: "Total Patients",
+  //   subTitle: "Patients per organization"
+  // }
 
   const patientColumns = [
     {
@@ -113,13 +126,7 @@ const DashboardAnalytics = () => {
     },
   ]
 
-  const multinationalsColumn = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      className: 'text-gray-6',
-    },
+  const organizationsColumn = [
     {
       title: 'Name',
       dataIndex: 'Name',
@@ -139,11 +146,38 @@ const DashboardAnalytics = () => {
       className: 'text-gray-6',
     },
     {
+      title: 'No of Patients',
+      dataIndex: 'patients',
+      render: patients => (
+        <>
+          {patients ? (
+            <Tag color="gold">{Object.keys(patients).length}</Tag>
+          ) : (
+            <Tag color="red">0</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: 'Disease Areas',
+      dataIndex: 'diseases',
+      render: diseases => (
+        <>
+          {diseases.map(disease => {
+            const color = disease.Disease.length > 4 ? 'geekblue' : 'green'
+            return (
+              <Tag color={color} key={disease.Disease}>
+                {disease.Disease}
+              </Tag>
+            )
+          })}
+        </>
+      ),
+    },
+    {
       dataIndex: 'action',
       key: 'action',
       render: (row, index) => {
-        // console.log(index)
-        // console.log(row)
         return (
           <div>
             <NavLink to={`/dashboard/multinationals/${index.id}`}>
@@ -169,48 +203,48 @@ const DashboardAnalytics = () => {
             <div className="card mb-4">
               <div className="card-body">
                 <div className="text-dark font-size-18 font-weight-bold mb-1">Current Patients</div>
-                <Table columns={patientColumns} dataSource={patients} />
+                <Table columns={patientColumns} dataSource={allPatients} />
               </div>
             </div>
             <div className="card mb-4">
               <div className="card-body">
                 <div className="text-dark font-size-18 font-weight-bold mb-1">
-                  Current Multinationals
+                  Current Organizations
                 </div>
-                <Table columns={multinationalsColumn} dataSource={multinationals} />
+                <Table columns={organizationsColumn} dataSource={organizations} />
               </div>
             </div>
           </div>
           <div className="col-xl-8 col-lg-6">
-            <div className="card">
-              <Chart2 />
-            </div>
+            {/* <div className="card">
+              { organizations && <Charts organizationData={organizations} chartCopy={patientGraphCopy} />}
+            </div> */}
             <div className="row">
               <div className="col-xl-6 col-lg-12">
-                <div className="card">
+                {/* <div className="card">
                   <div className="card-body">
                     <Chart9 />
                   </div>
-                </div>
-                <h5 className="text-dark mb-4">How do you acquire users?</h5>
+                </div> */}
+                {/* <h5 className="text-dark mb-4">How regularly do patients respond?</h5>
                 <div className="card">
                   <div className="card-body">
                     <Chart5 />
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="col-xl-6 col-lg-12">
-                <div className="card">
+                {/* <div className="card">
                   <div className="card-body">
                     <Chart10 />
                   </div>
-                </div>
-                <h5 className="text-dark mb-4">How are your active users trending over time?</h5>
+                </div> */}
+                {/* <h5 className="text-dark mb-4">How are your active users trending over time?</h5>
                 <div className="card">
                   <div className="card-body">
                     <Chart1 />
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -221,14 +255,14 @@ const DashboardAnalytics = () => {
               <List15 />
             </div>
           </div> */}
-            <div className="card">
+            {/* <div className="card">
               <div className="card-body">
                 <div className="text-dark font-size-18 font-weight-bold mb-1">
                   What are your top medicines?
                 </div>
                 <List12 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

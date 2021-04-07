@@ -7,8 +7,8 @@ const mapStateToProps = state => {
   }
 }
 
-const ManageMultiNationals = () => {
+const ManageOrganizations = () => {
   return <div>manage multinationals</div>
 }
 
-export default connect(mapStateToProps)(ManageMultiNationals)
+export default connect(mapStateToProps)(ManageOrganizations)
